@@ -34,7 +34,7 @@ from libqtile import qtile
 
 mod = "mod4"
 #terminal = guess_terminal()
-file_manager = "nautilus"
+file_manager = "pcmanfm"
 terminal  = "alacritty"
 web_browser = "google-chrome"
 web_browser_2 = "firefox"
@@ -84,7 +84,7 @@ keys = [
     Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    Key([mod], "r", lazy.spawn("rofi -show drun"), desc="Spawn rofi"),
     
     #sound
     Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
@@ -190,8 +190,8 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="Ubuntu Bold",
-    fontsize=12,
+    font="Fantasq Sans Mono",
+    fontsize=14,
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
@@ -245,6 +245,7 @@ screens = [
                 	background=colors[7],
                 	foreground=colors2[7]),
                 widget.Volume(
+                	font="Ubuntu Bold",
                 	fmt = ': {}',
                 	padding=5,
                 	background=colors[7]),
@@ -258,6 +259,7 @@ screens = [
                 #widget.Backlight(),
                 
                 widget.CPU(
+                	font="Ubuntu Bold",
                 	#font='FantasqSansMono NFM',
                 	format = 'CPU: {freq_current}GHz {load_percent}%',
                 	background=colors[4],
@@ -274,6 +276,7 @@ screens = [
                 	padding=1,
                 	background=colors[0]),
                 widget.WindowName(
+                	font="Ubuntu Bold",
                 	background=colors[0]),
                 widget.Chord(
                     chords_colors={
@@ -286,7 +289,8 @@ screens = [
                 #widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # widget.StatusNotifier(),
-                widget.Systray(),
+                widget.Systray(
+                	font="Ubuntu Bold"),
                 widget.TextBox(
                        text = '',
                        font = "3270Medium Nerd Font Mono",
@@ -296,6 +300,7 @@ screens = [
                        fontsize = 35
                        ),
                 widget.Clock(format=' %a, %d. %m. %Y. |  %I:%M %p',
+                	font="Ubuntu Bold",
 			foreground = colors[0],
                 	background = colors[1],
                 	fontsize=13),
@@ -308,6 +313,7 @@ screens = [
                        fontsize = 35
                        ),
                 widget.Battery(
+                	font="Ubuntu Bold",
                 	charge_char ='',
                     	discharge_char = '',
                     	format = '  {percent:2.0%} {char}',
@@ -321,8 +327,9 @@ screens = [
                        fontsize = 35
                        ),
                 widget.Net(
+                	font="Ubuntu Bold",
                        #interface = "enp5s0",
-                       format = 'Net: {down} ↓↑ {up}',
+                       format = '{down} ↓↑ {up}',
                        foreground = colors[0],
                        background = colors[4],
                        padding = 5
@@ -337,16 +344,34 @@ screens = [
                        fontsize = 35
                        ),
                 widget.Memory(
+                	font="Ubuntu Bold",
                        foreground = colors[1],
                        background = colors2[7],
-                       mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e htop')},
+                       mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(terminal+ ' -e htop')},
                        fmt = 'Mem: {}',
                        padding = 5
                        ),
-                widget.QuickExit(
-                	fmt = 'Q',
-                	fontsize = 12,
-                	background=colors[0]),
+                #widget.TaskList(),
+                #widget.Systray(),
+                widget.TextBox(
+		       text = '',
+                       font = "3270Medium Nerd Font Mono",
+                       background = colors2[7],
+                       foreground = colors[6],
+                       padding = -1,
+                       fontsize = 35
+                       ),
+		widget.LaunchBar(
+			default_icon = "/home/purnab/.config/qtile/python-white.png",
+			progs = [('powermenu','~/.local/bin/powermenu.sh','powermenu')],
+			mouse_callbacks = {'Button1': lambda: lazy.spawn(' -e ~/.local/bin/powermenu.sh')},
+			),
+               #widget.QuickExit(
+                	#font="Ubuntu Bold",
+                	#fmt = 'Q',
+                	#fontsize = 12,
+                	
+                	#background=colors[6])
             ],
             30,
            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
